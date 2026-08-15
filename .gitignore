@@ -1,0 +1,6 @@
+node_modules/
+coverage/
+*.zip
+.DS_Store
+.claude/
+client_secret_*.json

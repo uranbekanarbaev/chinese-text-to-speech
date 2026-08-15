@@ -1,0 +1,14 @@
+{
+  "name": "chinese-text-to-speech",
+  "version": "1.3.0",
+  "description": "Chrome extension: select Chinese text anywhere, hear it read aloud via a shared TTS web app.",
+  "private": true,
+  "scripts": {
+    "test": "jest",
+    "test:coverage": "jest --coverage"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}
