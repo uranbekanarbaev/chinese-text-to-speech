@@ -5,13 +5,13 @@ const TTS_URL       = 'https://uranbekanarbaev.dev';
 const WELCOME_URL   = 'https://uranbekanarbaev.dev/welcome-page/chinese-text-to-speech';
 const UNINSTALL_URL = 'https://uranbekanarbaev.dev/uninstall-page/chinese-text-to-speech';
 
-/* ── Toolbar click → open TTS page ─────────────────────────── */
+// Toolbar click → open TTS page
 chrome.action.onClicked.addListener(async () => {
   await ampTrack('Расш_иконка_нажата');
   chrome.tabs.create({ url: TTS_URL });
 });
 
-/* ── Install / Update ───────────────────────────────────────── */
+// Install / Update
 chrome.runtime.onInstalled.addListener(async (details) => {
   chrome.contextMenus.create({
     id: 'ctts_listen',
@@ -40,7 +40,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
   chrome.runtime.setUninstallURL(buildUninstallUrl(UNINSTALL_URL, uninstallDid));
 });
 
-/* ── Context menu ───────────────────────────────────────────── */
+// Context menu
 chrome.contextMenus.onClicked.addListener((data) => {
   if (data.menuItemId !== 'ctts_listen') return;
   const text = (data.selectionText || '').trim();
