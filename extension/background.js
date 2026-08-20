@@ -5,10 +5,26 @@ const TTS_URL       = 'https://uranbekanarbaev.dev';
 const WELCOME_URL   = 'https://uranbekanarbaev.dev/welcome-page/chinese-text-to-speech';
 const UNINSTALL_URL = 'https://uranbekanarbaev.dev/uninstall-page/chinese-text-to-speech';
 
-// Toolbar click → open TTS page
-chrome.action.onClicked.addListener(async () => {
+/**
+ * Tries to toggle the in-page reading panel via the content script.
+ * Falls back to opening the companion site when there's no content script
+ * to talk to - chrome:// pages, the Chrome Web Store, PDF viewer tabs, or
+ * a tab that was already open before install/update (content scripts only
+ * attach to tabs loaded after the extension registers).
+ */
+async function toggleOrFallback(tabId, message, fallbackUrl) {
+  try {
+    const response = await chrome.tabs.sendMessage(tabId, message);
+    if (!response || !response.ok) throw new Error('no panel in this tab');
+  } catch (e) {
+    chrome.tabs.create({ url: fallbackUrl });
+  }
+}
+
+// Toolbar click → toggle the in-page panel (falls back to the site)
+chrome.action.onClicked.addListener(async (tab) => {
   await ampTrack('Расш_иконка_нажата');
-  chrome.tabs.create({ url: TTS_URL });
+  await toggleOrFallback(tab.id, { type: 'CTTS_TOGGLE_PANEL' }, TTS_URL);
 });
 
 // Install / Update
@@ -40,8 +56,8 @@ chrome.runtime.onInstalled.addListener(async (details) => {
   chrome.runtime.setUninstallURL(buildUninstallUrl(UNINSTALL_URL, uninstallDid));
 });
 
-// Context menu
-chrome.contextMenus.onClicked.addListener((data) => {
+// Context menu → read the selection in-panel (falls back to the site)
+chrome.contextMenus.onClicked.addListener(async (data, tab) => {
   if (data.menuItemId !== 'ctts_listen') return;
   const text = (data.selectionText || '').trim();
   if (!text) return;
@@ -51,5 +67,9 @@ chrome.contextMenus.onClicked.addListener((data) => {
     есть_китайский: containsChinese(text),
   });
 
-  chrome.tabs.create({ url: buildListenUrl(TTS_URL, text) });
+  await toggleOrFallback(
+    tab.id,
+    { type: 'CTTS_READ_SELECTION', text },
+    buildListenUrl(TTS_URL, text)
+  );
 });

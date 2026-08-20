@@ -1,0 +1,16 @@
+services:
+
+  ctts_api:
+    build: .
+    container_name: ctts_api
+    env_file: .env
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000
+    expose:
+      - "8000"
+    networks:
+      - infra_net
+    restart: unless-stopped
+
+networks:
+  infra_net:
+    external: true

@@ -1,0 +1,14 @@
+fastapi==0.115.5
+uvicorn[standard]==0.32.1
+sqlalchemy[asyncio]==2.0.36
+asyncpg==0.30.0
+pydantic-settings==2.7.0
+python-jose[cryptography]==3.3.0
+httpx==0.28.0
+python-multipart==0.0.20
+tencentcloud-sdk-python-common>=3.1.101
+tencentcloud-sdk-python-tts>=3.1.101
+tencentcloud-sdk-python-asr>=3.1.101
+oss2>=2.18.0
+google-auth>=2.30.0
+websocket-client>=1.6.0

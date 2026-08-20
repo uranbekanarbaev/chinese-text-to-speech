@@ -14,7 +14,8 @@
     "storage"
   ],
   "host_permissions": [
-    "https://api2.amplitude.com/*"
+    "https://api2.amplitude.com/*",
+    "https://api.hsk-tutor.com/*"
   ],
   "action": {
     "default_title": "__MSG_actionTitle__",
@@ -26,5 +27,19 @@
   },
   "background": {
     "service_worker": "background.js"
-  }
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": [
+        "vendor/pinyin-pro.js",
+        "lib/dictionary.js",
+        "lib/page-text.js",
+        "lib/reading-queue.js",
+        "content/panel.js"
+      ],
+      "css": ["content/panel.css"],
+      "run_at": "document_idle"
+    }
+  ]
 }
